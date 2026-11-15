@@ -1,0 +1,11 @@
+{
+  "name": "ai-live",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "AI 直播最小可播链路：2D 皮套 + 音频驱动口型 + 弹幕回复",
+  "scripts": {
+    "start": "node server.mjs"
+  },
+  "engines": { "node": ">=20" }
+}

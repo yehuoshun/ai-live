@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AI 直播 · 皮套</title>
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; background: transparent; overflow: hidden; }
+  body { font-family: "Microsoft YaHei", "Segoe UI", system-ui, sans-serif; }
+  #stage { position: fixed; inset: 0; display: block; }
+  #subtitle {
+    position: fixed; left: 50%; bottom: 6.5vh; transform: translateX(-50%) translateY(12px);
+    max-width: 74vw; padding: 14px 26px; border-radius: 18px;
+    background: rgba(20, 22, 34, 0.72); color: #fff; font-size: clamp(16px, 2.1vw, 30px);
+    line-height: 1.5; letter-spacing: 0.5px; text-align: center; white-space: pre-wrap;
+    opacity: 0; transition: opacity .22s ease, transform .22s ease; pointer-events: none;
+    text-shadow: 0 2px 6px rgba(0,0,0,.45); z-index: 5;
+  }
+  #subtitle.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  #chip {
+    position: fixed; left: 18px; top: 16px; z-index: 6; display: flex; gap: 10px; align-items: center;
+    padding: 8px 14px; border-radius: 999px; font-size: 13px; color: #dfe6f5;
+    background: rgba(18, 20, 30, .62); border: 1px solid rgba(255,255,255,.12);
+  }
+  #chip .dot { width: 8px; height: 8px; border-radius: 50%; background: #f0a; box-shadow: 0 0 8px currentColor; }
+  #chip.ok .dot { background: #46d39a; }
+  #chip.bad .dot { background: #ff5d6c; }
+  #chip button {
+    all: unset; cursor: pointer; padding: 2px 10px; border-radius: 999px;
+    background: rgba(255,255,255,.12); color: #fff; font-size: 12px;
+  }
+  #chip button:hover { background: rgba(255,255,255,.22); }
+  #gate {
+    position: fixed; inset: 0; display: grid; place-items: center; z-index: 9;
+    background: radial-gradient(circle at 50% 45%, rgba(38,42,60,.92), rgba(12,14,22,.96));
+  }
+  #gate.hide { display: none; }
+  #gate .box { text-align: center; color: #e8eefc; }
+  #gate h1 { font-size: 22px; font-weight: 600; margin: 0 0 8px; letter-spacing: 1px; }
+  #gate p { margin: 0 0 22px; font-size: 13px; color: #93a0bb; }
+  #gate button {
+    all: unset; cursor: pointer; padding: 13px 34px; border-radius: 999px; font-size: 15px;
+    background: linear-gradient(135deg, #6d5cff, #b44bff); color: #fff; font-weight: 600;
+    box-shadow: 0 10px 30px rgba(110,90,255,.35);
+  }
+  #gate button:hover { filter: brightness(1.08); }
+  #danmaku {
+    position: fixed; right: 2.2vw; top: 12vh; width: min(360px, 34vw); z-index: 4;
+    display: flex; flex-direction: column; gap: 8px; pointer-events: none;
+  }
+  #danmaku .dm {
+    padding: 9px 13px; border-radius: 12px; font-size: clamp(12px, 1.25vw, 17px); line-height: 1.45;
+    background: rgba(18, 20, 32, .66); color: #eef2ff; border: 1px solid rgba(255,255,255,.1);
+    animation: dmIn .28s ease both; word-break: break-word;
+  }
+  #danmaku .dm b { color: #9fc3ff; font-weight: 600; margin-right: 6px; }
+  @keyframes dmIn { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: none; } }
+  body.clean #chip, body.clean #gate { display: none; }
+</style>
+</head>
+<body>
+<canvas id="stage"></canvas>
+<div id="subtitle"></div>
+<div id="danmaku"></div>
+<div id="chip"><span class="dot"></span><span id="chipText">连接中…</span><button id="btnTest">试说一句</button></div>
+<div id="gate"><div class="box">
+  <h1>AI 皮套已就绪</h1>
+  <p>浏览器要求先点一下才能出声</p>
+  <button id="btnStart">开始</button>
+</div></div>
+<script src="/puppet.js"></script>
+</body>
+</html>
