@@ -20,7 +20,7 @@ python bots\danmaku_client.py --mock
 # 只看链路不真的投递
 python bots\danmaku_client.py --mock --dry-run
 
-# 真机（房间号必填；凭据默认读 D:\DeepseekWork\config\bilibili.txt）
+# 真机（房间号必填；凭据默认读 config/bilibili.txt，也可用 --cookie-file 指定）
 python bots\danmaku_client.py --room 123456
 
 # 真机冒烟 30 秒后自动退出、并把弹幕送到皮套浮层

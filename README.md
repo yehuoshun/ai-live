@@ -8,8 +8,8 @@
 ## 一条命令跑起来
 
 ```
-cd D:\DeepseekWork\code\ai-live
-start.bat            :: 等价于 node server.mjs
+cd ai-live
+start.bat            :: 等价于 node server.mjs；Linux/macOS 用 node server.mjs
 ```
 
 然后浏览器打开 <http://127.0.0.1:8788/puppet.html>：
@@ -33,7 +33,7 @@ start.bat            :: 等价于 node server.mjs
 ```
 
 - **口型来源是音频本身**（AnalyserNode 实时 RMS），不是定时动画，所以和 TTS 音色、语速天然对齐。
-- TTS 走 Edge TTS（`python -m edge_tts`，本机已装），免费、无额度概念；换本地 GPT-SoVITS 只需改 `server.mjs` 里的 `runTts()`。
+- TTS 走 Edge TTS（`pip install edge-tts` 后用 `python -m edge_tts`），免费、无额度概念；换本地 GPT-SoVITS 只需改 `server.mjs` 里的 `runTts()`。
 - 服务只监听 `127.0.0.1`，不对外暴露。
 
 ## 接口
@@ -64,9 +64,9 @@ curl.exe -X POST http://127.0.0.1:8788/say -H "Content-Type: application/json" -
 | `MAX_CHARS` | 300 | 单条播报字数上限 |
 | `TTS_TIMEOUT_MS` | 45000 | 单条合成超时 |
 
-## OBS 推流接入（本机当前未安装 OBS）
+## OBS 推流接入
 
-1. 装 OBS Studio（本机没有，需先装）；
+1. 装 OBS Studio（<https://obsproject.com>）；
 2. 加一个**浏览器**源：URL `http://127.0.0.1:8788/puppet.html?clean=1&auto=1`，尺寸 1080×1350；
 3. 勾选「关闭源时关闭页面」；页面 `body` 本身是透明的，OBS 浏览器源默认透明采集，若出现黑底，在该源的「自定义 CSS」里写 `body { background: transparent; }`；
 4. 声音：OBS 28+ 的浏览器源有「控制音频通过 OBS 播放」，勾上后皮套的声音直接进推流；或改用「应用程序音频采集」抓 Edge/Chrome；
@@ -92,7 +92,12 @@ ai-live/
 4. **TTS 是 Edge 云端**（不占额度但要联网）。完全离线请换成本地 GPT-SoVITS：改 `runTts()` 成 POST 到 `http://127.0.0.1:9880/tts` 即可，接口形状一致。
 5. 音频文件留在 `tmp/`，重启后旧文件仍在（不自动清理，按工作区约定删除需人工确认）。
 
+## 贡献
+
+欢迎 PR，尤其是这几件：**Live2D 适配器**、长文本自动切句、弹幕回复接本地 LLM、OBS 场景文件一键导入、更多 TTS 后端。
+跑起来的方式、每个任务的入口文件和约定都写在 [CONTRIBUTING.md](CONTRIBUTING.md)。许可 MIT。
+
 ## 安全
 
 - 仅监听 127.0.0.1；不做公网暴露。
-- 弹幕凭据只从 `D:\DeepseekWork\config\bilibili.txt` 读，代码与日志里不出现。
+- 弹幕凭据只从本地 `config/bilibili.txt`（或 `--cookie-file` 指定的路径）读，代码与日志里不出现内容。
